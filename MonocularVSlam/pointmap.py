@@ -107,4 +107,21 @@ class Map(object):
         # updating queue
         self.q.put((np.array(poses), np.array(pts)))
 
-        
+class Point(object):
+    # A Point is a 3-D point in the world
+    # Each point is observed in multiple frames
+ 
+    def __init__(self, mapp, loc):
+        self.frames = []
+        self.pt = loc
+        self.idxs = []
+ 
+        # assigns a unique ID to the point based on the current number of points in the map.
+        self.id = len(mapp.points)
+        # adds the point instance to the map’s list of points.
+        mapp.points.append(self)
+ 
+    def add_observation(self, frame, idx):
+        # Frame is the frame class
+        self.frames.append(frame)
+        self.idxs.append(idx)

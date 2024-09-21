@@ -3,7 +3,9 @@ import numpy as np
 from skimage.measure import ransac
 from skimage.transform import FundamentalMatrixTransform
 import g2o
- 
+
+IRt = np.eye(4)
+
 def add_ones(x):
     # creates homogenious coordinates given the point x
     return np.concatenate([x, np.ones((x.shape[0], 1))], axis=1)
@@ -11,7 +13,7 @@ def add_ones(x):
  
 def extractPose(F):
     # Define the W matrix used for computing the rotation matrix
-    W = np.mat([[0, -1, 0], [1, 0, 0], [0, 0, 1]])
+    W = np.asmatrix([[0, -1, 0], [1, 0, 0], [0, 0, 1]])
      
     # Perform Singular Value Decomposition (SVD) on the Fundamental matrix F
     U, d, Vt = np.linalg.svd(F)
