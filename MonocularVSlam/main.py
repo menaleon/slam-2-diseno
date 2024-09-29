@@ -76,11 +76,15 @@ def process_frame(img):
     mapp.display()
  
 if __name__== "__main__":
-    cap = cv2.VideoCapture("output_video.mp4")
- 
+    cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_3.mp4")
+    counter_frame = 0
     while cap.isOpened():
+        print(f"Working on frame {counter_frame}")
         ret, frame = cap.read()
+        counter_frame += 1
         if ret == True:
             process_frame(frame)
         else:
+            wait = input("Write something and enter to close ")
+            print("Ok")
             break
