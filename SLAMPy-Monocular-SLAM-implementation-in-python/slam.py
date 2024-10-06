@@ -7,8 +7,12 @@ from display import Display
 from match_frames import generate_match
 from descriptor import Descriptor, Point
 
+cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_18.mp4")
 
 F= int(os.getenv("F","500")) # Focal point of the camera
+#W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+#H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+#print(W,H)
 W, H = 1920//2, 1080//2 # Width and height of frames (commonly half of Full HD resolution sizes 1920, 1080)
 K = np.array([[F,0,W//2],[0,F,H//2],[0,0,1]]) # Intrinsic matrix of the system
 desc_dict = Descriptor()
@@ -75,7 +79,6 @@ if __name__ == "__main__":
     cap = cv2.VideoCapture(sys.argv[1]) # Can try Realtime(highly unlikely though) """
     #cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/MonocularVSlam/output_video.mp4")
     #/home/faleivac/Documents/GitHub/TFG_FL_SLAM/SetDeDatos/video_prueba_1.mp4
-    cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_3.mp4")
 
     test= Display(W,H)
     print("Thisis a test-2")
@@ -87,12 +90,13 @@ if __name__ == "__main__":
         
         counter_frame += 1
         if ret == True:
-          print("Thisis a test")
-          frame1 = cv2.resize(frame, (720,400)) #Resizing the original window
-          cv2.imshow("Frame",frame1)    
-          if cv2.waitKey(1) & 0xFF == ord('q'):   #Quit Condition
-              break
-          generate_SLAM(frame)
+          if counter_frame % 3 == 0:
+            print("Thisis a test")
+            frame1 = cv2.resize(frame, (720,400)) #Resizing the original window
+            cv2.imshow("Frame",frame1)    
+            if cv2.waitKey(1) & 0xFF == ord('q'):   #Quit Condition
+                break
+            generate_SLAM(frame)
         else:
           wait = input("Write something and enter to close ")
           print("Ok")

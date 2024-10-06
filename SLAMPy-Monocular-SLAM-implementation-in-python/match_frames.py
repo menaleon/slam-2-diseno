@@ -31,20 +31,7 @@ def extractRt(F):
 def generate_match(f1, f2):
   bf = cv2.BFMatcher(cv2.NORM_HAMMING)
   matches = bf.knnMatch(f1.descriptors, f2.descriptors, k=2)
-  print("Descriptores de frame 1")
-  print(f"Numero de filas {len(f1.descriptors)}")
-  print(f"Numero de columnas en fila 1 {len(f1.descriptors[0])}")
-  print(f"Numero de columnas en fila 2 {len(f1.descriptors[1])}")
-  print(f"Numero de columnas en fila 3 {len(f1.descriptors[2])}")
-
-
-  print("Descriptores de frame 2")
-  print(f"Numero de filas {len(f2.descriptors)}")
-  print(f"Numero de columnas en fila 1 {len(f2.descriptors[0])}")
-  print(f"Numero de columnas en fila 2 {len(f2.descriptors[1])}")
-  print(f"Numero de columnas en fila 3 {len(f2.descriptors[2])}")
-
-  input("Something")
+  
 
   # Lowe's ratio test
   ret = []
