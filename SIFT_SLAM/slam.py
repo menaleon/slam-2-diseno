@@ -7,7 +7,7 @@ from display import Display
 from match_frames import generate_match
 from descriptor import Descriptor, Point
 
-cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_18.mp4")
+cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_30.mp4")
 
 F= int(os.getenv("F","500")) # Focal point of the camera
 #W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))

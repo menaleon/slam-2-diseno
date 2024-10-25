@@ -7,7 +7,7 @@ from display import Display
 from match_frames import generate_match
 from descriptor import Descriptor, Point
 
-cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_18.mp4")
+cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_32.mp4")
 
 F= int(os.getenv("F","500")) # Focal point of the camera
 #W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -72,7 +72,7 @@ def generate_SLAM(image):
 
     #desc_dict.max_frame = frame.id
 
-    if frame.id % 5 == 0:  # Por ejemplo, optimiza cada 5 fotogramas
+    if frame.id % 20 == 0:  # Por ejemplo, optimiza cada 5 fotogramas
         print("Ejecutando optimización de Bundle Adjustment")
         desc_dict.optimize()
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         
         counter_frame += 1
         if ret == True:
-          if counter_frame % 3 == 0:
+          #if counter_frame % 3 == 0:
             print("Thisis a test")
             frame1 = cv2.resize(frame, (720,400)) #Resizing the original window
             cv2.imshow("Frame",frame1)    

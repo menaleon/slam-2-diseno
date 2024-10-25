@@ -165,3 +165,8 @@ cython_debug/
 # Ignores of own project
 
 Dataset/
+
+# Ignore results 
+*.npy
+
+StrayVisualizer-main/images/

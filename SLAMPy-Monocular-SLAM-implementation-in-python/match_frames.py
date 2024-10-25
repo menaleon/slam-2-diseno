@@ -68,7 +68,7 @@ def generate_match(f1, f2):
                           min_samples=8,
                           residual_threshold=0.001,
                           max_trials=100)
-  print("Matches: %d -> %d -> %d -> %d" % (len(f1.descriptors), len(matches), len(f_pts), sum(f_pts)))
+  #print("Matches: %d -> %d -> %d -> %d" % (len(f1.descriptors), len(matches), len(f_pts), sum(f_pts)))
 
   # ignore outliers
   Rt = extractRt(model.params)

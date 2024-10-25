@@ -7,7 +7,6 @@ from display import Display
 from match_frames import generate_match
 from descriptor import Descriptor, Point
 
-cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/video_prueba_18.mp4")
 
 F= int(os.getenv("F","500")) # Focal point of the camera
 #W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -23,6 +22,7 @@ desc_dict.create_viewer()
 # if os.getenv("D2D") is not None:
 disp = Display(W, H)
 
+trajectory = []
 
 def calibrate(image):
     # camera intrinsics...<================Check this
@@ -31,7 +31,6 @@ def calibrate(image):
 
 def generate_SLAM(image):
     image = calibrate(image)
-    print("Thisis a test0")
     frame = Camera(desc_dict, image, K)
     if frame.id == 0:
         return
@@ -40,15 +39,15 @@ def generate_SLAM(image):
 
     x1,x2,Id = generate_match(frame1,frame2)
     frame1.pose =np.dot(Id,frame2.pose)
+
+    trajectory.append(frame1.pose.copy())
     for i,idx in enumerate(x2):
         if frame2.pts[idx] is not None:
             frame2.pts[idx].add_observation(frame1,x1[i])
     # homogeneous 3-D coords
-    print("Thisis a test1")
     pts4d = triangulate(frame1.pose, frame2.pose, frame1.key_pts[x1], frame2.key_pts[x2])
     pts4d /= pts4d[:, 3:]
     unmatched_points = np.array([frame1.pts[i] is None for i in x1])
-    print("Adding:  %d points" % np.sum(unmatched_points))
     good_pts4d = (np.abs(pts4d[:, 3]) > 0.005) & (pts4d[:, 2] > 0) & unmatched_points
 
     for i,p in enumerate(pts4d):
@@ -71,35 +70,46 @@ def generate_SLAM(image):
     desc_dict.display()
 
 if __name__ == "__main__":
-    """if len(sys.argv) < 2:
+    # cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/LIDAR/prueba2/ef673d587c/rgb2.mp4")
+
+    if len(sys.argv) < 2:
         print("%s takes in .mp4 as an arg" %sys.argv[0])
         exit(-1)
-    print("Thisis a test-1")
 
-    cap = cv2.VideoCapture(sys.argv[1]) # Can try Realtime(highly unlikely though) """
+    dataset_path = sys.argv[1]
+    video_path = os.path.join(dataset_path, 'rgb.mp4')
+
+    if not os.path.exists(video_path):
+        print(f"No se encontró el archivo 'rgb.mp4' en la ruta {dataset_path}")
+        sys.exit(-1)
+
+
+    cap = cv2.VideoCapture(video_path) # Can try Realtime(highly unlikely though) 
     #cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/MonocularVSlam/output_video.mp4")
     #/home/faleivac/Documents/GitHub/TFG_FL_SLAM/SetDeDatos/video_prueba_1.mp4
 
     test= Display(W,H)
-    print("Thisis a test-2")
     counter_frame = 0
     while cap.isOpened():
         ret, frame = cap.read()
-        print(f"Working on frame {counter_frame}")
-        print("Thisis a test-3")
         
         counter_frame += 1
         if ret == True:
-          if counter_frame % 3 == 0:
-            print("Thisis a test")
+          #if counter_frame % 3 == 0:
+            if "dataset/lidar" in dataset_path.lower():
+                frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
+            
             frame1 = cv2.resize(frame, (720,400)) #Resizing the original window
             cv2.imshow("Frame",frame1)    
             if cv2.waitKey(1) & 0xFF == ord('q'):   #Quit Condition
                 break
             generate_SLAM(frame)
         else:
-          wait = input("Write something and enter to close ")
-          print("Ok")
           break
     cap.release() 
     cv2.destroyAllWindows()
+
+    trajectory_array = np.array(trajectory)
+    np.save('slam_monocular.npy', trajectory_array)
+    print("Trayectoria guardada en 'slam_monocular.npy'")
