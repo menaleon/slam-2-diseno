@@ -170,3 +170,4 @@ Dataset/
 *.npy
 
 StrayVisualizer-main/images/
+GUI/results.json
