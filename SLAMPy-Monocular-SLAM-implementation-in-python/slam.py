@@ -96,7 +96,7 @@ if __name__ == "__main__":
         counter_frame += 1
         if ret == True:
           #if counter_frame % 3 == 0:
-            if "dataset/lidar" in dataset_path.lower():
+            if "lidar" in dataset_path.lower():
                 frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
             
