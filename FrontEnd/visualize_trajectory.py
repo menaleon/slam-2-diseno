@@ -22,28 +22,26 @@ def draw_trajectory(trajectory, window_title):
     dcam.SetBounds(0.0, 1.0, 0.0, 1.0)
     dcam.SetHandler(handler)
 
-    # Extraer las posiciones de la trayectoria
     positions = trajectory[:, :3, 3]
 
     while not pangolin.ShouldQuit():
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
         dcam.Activate(scam)
 
-        # Dibujar la trayectoria
         gl.glLineWidth(2)
-        gl.glColor3f(0.0, 1.0, 0.0)  # Color verde para la trayectoria
+        gl.glColor3f(0.0, 1.0, 0.0) 
         pangolin.DrawLine(positions)
 
-        # Marcar el punto de inicio
+        # for start point
         gl.glPointSize(10)
-        gl.glColor3f(1.0, 0.0, 0.0)  # Color rojo para el inicio
+        gl.glColor3f(1.0, 0.0, 0.0)  # red for start
         gl.glBegin(gl.GL_POINTS)
         gl.glVertex3f(positions[0][0], positions[0][1], positions[0][2])
         gl.glEnd()
 
-        # Marcar el punto de finalización
+        # for end point
         gl.glPointSize(10)
-        gl.glColor3f(0.0, 0.0, 1.0)  # Color azul para el final
+        gl.glColor3f(0.0, 0.0, 1.0)  # blue for end
         gl.glBegin(gl.GL_POINTS)
         gl.glVertex3f(positions[-1][0], positions[-1][1], positions[-1][2])
         gl.glEnd()

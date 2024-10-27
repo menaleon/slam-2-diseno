@@ -20,7 +20,7 @@ desc_dict.create_viewer()
 
 # disp = None
 # if os.getenv("D2D") is not None:
-disp = Display(W, H)
+#disp = Display(W, H)
 
 trajectory = []
 
@@ -64,8 +64,9 @@ def generate_SLAM(image):
         cv2.line(image, (u1, v1), (u2, v2), color=(255, 255,0))
 
     # 2-D display
+    """
     if disp is not None:
-        disp.display2D(image)
+        disp.display2D(image)"""
     # 3-D display
     desc_dict.display()
 
@@ -88,7 +89,6 @@ if __name__ == "__main__":
     #cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/MonocularVSlam/output_video.mp4")
     #/home/faleivac/Documents/GitHub/TFG_FL_SLAM/SetDeDatos/video_prueba_1.mp4
 
-    test= Display(W,H)
     counter_frame = 0
     while cap.isOpened():
         ret, frame = cap.read()
@@ -96,14 +96,15 @@ if __name__ == "__main__":
         counter_frame += 1
         if ret == True:
           #if counter_frame % 3 == 0:
+          
             if "lidar" in dataset_path.lower():
                 frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
             
             frame1 = cv2.resize(frame, (720,400)) #Resizing the original window
-            cv2.imshow("Frame",frame1)    
+            """cv2.imshow("Frame",frame1)    
             if cv2.waitKey(1) & 0xFF == ord('q'):   #Quit Condition
-                break
+                break """
             generate_SLAM(frame)
         else:
           break

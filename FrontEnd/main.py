@@ -1,11 +1,13 @@
+# main.py
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from tkinter import filedialog, messagebox
 import os
 import subprocess
 import threading
+import time
+from slam_tests import Testing  
 
-# Variables globales para root y style
 root = None
 style = None
 
@@ -19,10 +21,29 @@ def run_monocular_slam():
             messagebox.showerror("Error", "La carpeta seleccionada no contiene 'rgb.mp4'.")
 
 def execute_monocular_slam(dataset_path):
+    testing = Testing(dataset_path, "monocular")
     try:
+        def monitor_resources():
+            while testing.end_time is None:
+                testing.take_measure()
+                time.sleep(1)
+
+        # Iniciar el hilo para monitorear los recursos
+        monitor_thread = threading.Thread(target=monitor_resources)
+        monitor_thread.start()
+
+        # Ejecutar el algoritmo
         subprocess.run(['python3', '../SLAMPy-Monocular-SLAM-implementation-in-python/slam.py', dataset_path], check=True)
+        print("Don")
+        # Finalizar y guardar el testing antes de mostrar el messagebox
+        testing.end_testing()
+        testing.save_data()
+
         messagebox.showinfo("Éxito", "Mapeo terminado exitosamente.")
     except subprocess.CalledProcessError as e:
+        # Finalizar y guardar el testing antes de mostrar el messagebox de error
+        testing.end_testing()
+        testing.save_data()
         messagebox.showerror("Error", f"Error al ejecutar SLAM monocular:\n{e}")
 
 def run_lidar_slam():
@@ -36,10 +57,29 @@ def run_lidar_slam():
             messagebox.showerror("Error", "La carpeta seleccionada no contiene los archivos necesarios para SLAM Lidar.")
 
 def execute_lidar_slam(dataset_path):
+    testing = Testing(dataset_path, "lidar")
     try:
+        def monitor_resources():
+            while testing.end_time is None:
+                testing.take_measure()
+                time.sleep(1)
+
+        # Iniciar el hilo para monitorear los recursos
+        monitor_thread = threading.Thread(target=monitor_resources)
+        monitor_thread.start()
+
+        # Ejecutar el algoritmo
         subprocess.run(['python3', '../StrayWithPangolin/main.py', dataset_path], check=True)
+
+        # Finalizar y guardar el testing antes de mostrar el messagebox
+        testing.end_testing()
+        testing.save_data()
+
         messagebox.showinfo("Éxito", "Mapeo terminado exitosamente.")
     except subprocess.CalledProcessError as e:
+        # Finalizar y guardar el testing antes de mostrar el messagebox de error
+        testing.end_testing()
+        testing.save_data()
         messagebox.showerror("Error", f"Error al ejecutar SLAM Lidar:\n{e}")
 
 def compare_results():
@@ -55,14 +95,11 @@ def compare_results():
         algos = ' y '.join(missing)
         messagebox.showerror("Error", f"Debes ejecutar el algoritmo {algos} para comparar los resultados.")
     else:
-        # Ejecutar visualize_trajectory.py para ambas trayectorias y mostrar la ventana de leyenda
         execute_visualization_with_legend(monocular_trajectory, lidar_trajectory)
 
 def execute_visualization_with_legend(monocular_trajectory, lidar_trajectory):
-    # Crear una lista para almacenar los procesos de visualización
     pangolin_processes = []
 
-    # Iniciar las visualizaciones en procesos separados
     def start_visualization(trajectory_file):
         process = subprocess.Popen(['python3', 'visualize_trajectory.py', trajectory_file])
         pangolin_processes.append(process)
@@ -70,7 +107,6 @@ def execute_visualization_with_legend(monocular_trajectory, lidar_trajectory):
     threading.Thread(target=start_visualization, args=(monocular_trajectory,)).start()
     threading.Thread(target=start_visualization, args=(lidar_trajectory,)).start()
 
-    # Mostrar la ventana de leyenda
     show_legend_window(pangolin_processes)
 
 def show_legend_window(pangolin_processes):
@@ -79,44 +115,35 @@ def show_legend_window(pangolin_processes):
     legend_window.geometry("300x200")
     legend_window.configure(background=style.colors.bg)
 
-    # Crear un marco para centrar los widgets
     frame = ttk.Frame(legend_window, padding=10)
     frame.pack(expand=True, fill=BOTH)
 
-    # Punto rojo y etiqueta
     red_dot = ttk.Canvas(frame, width=20, height=20, background=style.colors.bg)
     red_dot.create_oval(2, 2, 18, 18, fill='red')
     red_dot.grid(row=0, column=0, padx=5, pady=5, sticky='w')
     red_label = ttk.Label(frame, text="Indica punto de inicio", foreground='white')
     red_label.grid(row=0, column=1, sticky='w')
 
-    # Punto azul y etiqueta
     blue_dot = ttk.Canvas(frame, width=20, height=20, background=style.colors.bg)
     blue_dot.create_oval(2, 2, 18, 18, fill='blue')
     blue_dot.grid(row=1, column=0, padx=5, pady=5, sticky='w')
     blue_label = ttk.Label(frame, text="Indica punto de final", foreground='white')
     blue_label.grid(row=1, column=1, sticky='w')
 
-    # Botón "Ok" para cerrar las ventanas
     def on_ok():
-        # Cerrar los procesos de Pangolin
         for process in pangolin_processes:
             process.terminate()
-        # Cerrar la ventana de leyenda
         legend_window.destroy()
 
-    # Botón con estilo personalizado
     ok_button = ttk.Button(frame, text="Ok", command=on_ok, width=15, style='Custom.TButton')
     ok_button.grid(row=2, column=0, columnspan=2, pady=20)
 
-    # Configurar para que la ventana de leyenda sea modal
     legend_window.transient(root)
     legend_window.grab_set()
     root.wait_window(legend_window)
 
 def main():
-    global root, style  # Asegurar que root y style son accesibles globalmente
-    # Inicializar ttkbootstrap con un tema oscuro
+    global root, style
     style = ttk.Style(theme="darkly")
     root = style.master
     root.title("SLAM")
@@ -124,21 +151,18 @@ def main():
     root.resizable(False, False)
     root.configure(background=style.colors.bg)
 
-    # Crear un marco para centrar los widgets
     frame = ttk.Frame(root)
     frame.place(relx=0.5, rely=0.5, anchor='center')
 
     label = ttk.Label(frame, text="Seleccione una opción:", font=("Helvetica", 14), foreground='white')
     label.pack(pady=10)
 
-    # Estilo personalizado para los botones con sombra simulada
     style.configure('Custom.TButton', font=('Helvetica', 12), padding=10)
     style.map('Custom.TButton',
               foreground=[('!disabled', 'white')],
               background=[('!disabled', style.colors.primary)],
               relief=[('pressed', 'sunken'), ('!pressed', 'raised')])
 
-    # Botones con estilo personalizado
     btn_monocular = ttk.Button(frame, text="Ejecutar SLAM Monocular", command=run_monocular_slam, width=30, style='Custom.TButton')
     btn_monocular.pack(pady=5)
 
