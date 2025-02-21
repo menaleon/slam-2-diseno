@@ -48,6 +48,7 @@ def generate_SLAM(image):
     pts4d = triangulate(frame1.pose, frame2.pose, frame1.key_pts[x1], frame2.key_pts[x2])
     pts4d /= pts4d[:, 3:]
     unmatched_points = np.array([frame1.pts[i] is None for i in x1])
+    #print("Adding:  %d points" % np.sum(unmatched_points))
     good_pts4d = (np.abs(pts4d[:, 3]) > 0.005) & (pts4d[:, 2] > 0) & unmatched_points
 
     for i,p in enumerate(pts4d):
@@ -66,12 +67,20 @@ def generate_SLAM(image):
     # 2-D display
     """
     if disp is not None:
-        disp.display2D(image)"""
+        disp.display2D(image) """
     # 3-D display
     #desc_dict.display()
 
 if __name__ == "__main__":
-    # cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/Dataset/LIDAR/prueba2/ef673d587c/rgb2.mp4")
+    """if len(sys.argv) < 2:
+        print("%s takes in .mp4 as an arg" %sys.argv[0])
+        exit(-1)
+    print("Thisis a test-1")
+
+    cap = cv2.VideoCapture(sys.argv[1]) # Can try Realtime(highly unlikely though) """
+    #cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/MonocularVSlam/output_video.mp4")
+    #/home/faleivac/Documents/GitHub/TFG_FL_SLAM/SetDeDatos/video_prueba_1.mp4
+    
 
     if len(sys.argv) < 2:
         print("%s takes in .mp4 as an arg" %sys.argv[0])
@@ -85,32 +94,28 @@ if __name__ == "__main__":
         sys.exit(-1)
 
 
-    cap = cv2.VideoCapture(video_path) # Can try Realtime(highly unlikely though) 
-    #cap = cv2.VideoCapture("/home/faleivac/Documents/GitHub/TFG_FL_SLAM/MonocularVSlam/output_video.mp4")
-    #/home/faleivac/Documents/GitHub/TFG_FL_SLAM/SetDeDatos/video_prueba_1.mp4
+    cap = cv2.VideoCapture(video_path)
 
     counter_frame = 0
     while cap.isOpened():
         ret, frame = cap.read()
+        print(f"Working on frame {counter_frame}")
+        #print("Thisis a test-3")
         
         counter_frame += 1
         if ret == True:
-          #if counter_frame % 3 == 0:
-          
-            """if "lidar" in dataset_path.lower():
-                frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)"""
-
-            
+          #if counter_frame % 2 == 0:
             frame1 = cv2.resize(frame, (720,400)) #Resizing the original window
             """cv2.imshow("Frame",frame1)    
             if cv2.waitKey(1) & 0xFF == ord('q'):   #Quit Condition
                 break """
             generate_SLAM(frame)
         else:
+          
           break
     cap.release() 
     cv2.destroyAllWindows()
 
     trajectory_array = np.array(trajectory)
-    np.save('slam_monocular.npy', trajectory_array)
-    print("Trayectoria guardada en 'slam_monocular.npy'")
+    np.save('slam_sift.npy', trajectory_array)
+    print("Trayectoria guardada en 'slam_sift.npy'")
