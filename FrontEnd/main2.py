@@ -26,7 +26,7 @@ def execute_algorithm(dataset_path, algorithm):
         monitor_thread = threading.Thread(target=monitor_resources)
         monitor_thread.start()
 
-        # Selección de comandos de acuerdo al algoritmo
+        # seleccion de comandos de acuerdo con el algoritmo
         if algorithm == "monocular":
             print("Comenzando monocular")
             subprocess.run(['python3', '../SLAMPy-Monocular-SLAM-implementation-in-python/slam.py', dataset_path], check=True)
