@@ -1,36 +1,36 @@
 import numpy as np
-import pangolin
+import pypangolin
 import OpenGL.GL as gl
 import sys
 import os
 
 def draw_trajectory(trajectory, window_title):
-    pangolin.CreateWindowAndBind(window_title, 1024, 768)
+    pypangolin.CreateWindowAndBind(window_title, 1024, 768)
     gl.glEnable(gl.GL_DEPTH_TEST)
 
     # Configurar la cámara
-    scam = pangolin.OpenGlRenderState(
-        pangolin.ProjectionMatrix(1024, 768, 500, 500, 512, 389, 0.1, 1000),
-        pangolin.ModelViewLookAt(0, -10, -20,
+    scam = pypangolin.OpenGlRenderState(
+        pypangolin.ProjectionMatrix(1024, 768, 500, 500, 512, 389, 0.1, 1000),
+        pypangolin.ModelViewLookAt(0, -10, -20,
                                  0, 0, 0,
                                  0, -1, 0)
     )
 
-    handler = pangolin.Handler3D(scam)
+    handler = pypangolin.Handler3D(scam)
 
-    dcam = pangolin.CreateDisplay()
+    dcam = pypangolin.CreateDisplay()
     dcam.SetBounds(0.0, 1.0, 0.0, 1.0)
     dcam.SetHandler(handler)
 
     positions = trajectory[:, :3, 3]
 
-    while not pangolin.ShouldQuit():
+    while not pypangolin.ShouldQuit():
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
         dcam.Activate(scam)
 
         gl.glLineWidth(2)
         gl.glColor3f(0.0, 1.0, 0.0) 
-        pangolin.DrawLine(positions)
+        pypangolin.DrawLine(positions)
 
         # for start point
         gl.glPointSize(10)
@@ -46,7 +46,7 @@ def draw_trajectory(trajectory, window_title):
         gl.glVertex3f(positions[-1][0], positions[-1][1], positions[-1][2])
         gl.glEnd()
 
-        pangolin.FinishFrame()
+        pypangolin.FinishFrame()
 
 if __name__ == '__main__':
 
