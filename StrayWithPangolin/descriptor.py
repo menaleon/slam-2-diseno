@@ -1,5 +1,5 @@
 import numpy as np
-import pangolin
+import pypangolin
 import OpenGL.GL as gl
 from multiprocessing import Process, Queue
 import time
@@ -14,23 +14,23 @@ class PangolinViewer:
 
     def viewer_thread(self, q):
         self.viewer_init(1024, 768)
-        while not pangolin.ShouldQuit():
+        while not pypangolin.ShouldQuit():
             self.viewer_refresh(q)
             time.sleep(0.01)  # Evita alto uso de CPU
 
     def viewer_init(self, w, h):
-        pangolin.CreateWindowAndBind('SLAM Viewer', w, h)
+        pypangolin.CreateWindowAndBind('SLAM Viewer', w, h)
         gl.glEnable(gl.GL_DEPTH_TEST)
 
-        self.scam = pangolin.OpenGlRenderState(
-            pangolin.ProjectionMatrix(w, h, 500, 500, w//2, h//2, 0.1, 1000),
-            pangolin.ModelViewLookAt(0, -5, -10, 0, 0, 0, 0, -1, 0)
+        self.scam = pypangolin.OpenGlRenderState(
+            pypangolin.ProjectionMatrix(w, h, 500, 500, w//2, h//2, 0.1, 1000),
+            pypangolin.ModelViewLookAt(0, -5, -10, 0, 0, 0, 0, -1, 0)
         )
 
-        self.handler = pangolin.Handler3D(self.scam)
-        self.dcam = pangolin.CreateDisplay().SetBounds(
-            pangolin.Attach(0), pangolin.Attach(1),
-            pangolin.Attach(0), pangolin.Attach(1), -w/h
+        self.handler = pypangolin.Handler3D(self.scam)
+        self.dcam = pypangolin.CreateDisplay().SetBounds(
+            pypangolin.Attach(0), pypangolin.Attach(1),
+            pypangolin.Attach(0), pypangolin.Attach(1), -w/h
         ).SetHandler(self.handler)
 
     def viewer_refresh(self, q):
@@ -46,16 +46,16 @@ class PangolinViewer:
         if 'trajectory' in self.state:
             trajectory = self.state['trajectory']
             gl.glColor3f(1.0, 0.0, 0.0)
-            pangolin.DrawLine(trajectory)
+            pypangolin.DrawLine(trajectory)
 
         # Dibujar la nube de puntos
         if 'points' in self.state and self.state['points'] is not None:
             points = self.state['points']
             gl.glPointSize(2)
             gl.glColor3f(0.0, 1.0, 0.0)
-            pangolin.DrawPoints(points)
+            pypangolin.DrawPoints(points)
 
-        pangolin.FinishFrame()
+        pypangolin.FinishFrame()
 
     def update(self, trajectory, points=None):
         state = {'trajectory': trajectory}

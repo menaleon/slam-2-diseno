@@ -1,7 +1,7 @@
 from multiprocessing import Process, Queue
 import numpy as np
 import OpenGL.GL as gl
-import pangolin
+import pypangolin
 import g2o
 
 class Point(object):
@@ -62,18 +62,18 @@ class Descriptor(object):
       self.viewer_refresh(q)
 
   def viewer_init(self, w, h):
-    pangolin.CreateWindowAndBind('Main', w, h)
+    pypangolin.CreateWindowAndBind('Main', w, h)
     gl.glEnable(gl.GL_DEPTH_TEST)
 
-    self.scam = pangolin.OpenGlRenderState(
-      pangolin.ProjectionMatrix(w, h, 420, 420, w//2, h//2, 0.2, 10000),
-      pangolin.ModelViewLookAt(0, -10, -8,
+    self.scam = pypangolin.OpenGlRenderState(
+      pypangolin.ProjectionMatrix(w, h, 420, 420, w//2, h//2, 0.2, 10000),
+      pypangolin.ModelViewLookAt(0, -10, -8,
                                0, 0, 0,
                                0, -1, 0))
-    self.handler = pangolin.Handler3D(self.scam)
+    self.handler = pypangolin.Handler3D(self.scam)
 
     # Create Interactive View in window
-    self.dcam = pangolin.CreateDisplay()
+    self.dcam = pypangolin.CreateDisplay()
     self.dcam.SetBounds(0.0, 1.0, 0.0, 1.0, -w/h)
     self.dcam.SetHandler(self.handler)
 
@@ -93,21 +93,21 @@ class Descriptor(object):
     #colors[:, 0] = 1 - points[:, 2]
     #points = points * 3 + 1
     #gl.glPointSize(10)
-    #pangolin.DrawPoints(self.state[1], colors)
+    #pypangolin.DrawPoints(self.state[1], colors)
 
     # draw keypoints
     gl.glPointSize(2)
     gl.glColor3f(0.184314, 0.309804, 0.184314)
-    pangolin.DrawPoints(self.state[1]+1)
+    pypangolin.DrawPoints(self.state[1]+1)
     gl.glPointSize(1)
     gl.glColor3f(0.3099, 0.3099,0.184314)
-    pangolin.DrawPoints(self.state[1])
+    pypangolin.DrawPoints(self.state[1])
 
     # draw poses
     gl.glColor3f(0.0, 1.0, 1.0)
-    pangolin.DrawCameras(self.state[0])
+    pypangolin.DrawCameras(self.state[0])
 
-    pangolin.FinishFrame()
+    pypangolin.FinishFrame()
 
   def display(self):
     if self.q is None:

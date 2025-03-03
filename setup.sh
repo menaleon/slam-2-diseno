@@ -1,19 +1,15 @@
 #!/bin/bash
 
-set -e  # Detener la ejecución si ocurre un error
-
 # Instalar Python 3.10 y paquetes necesarios
-sudo apt update
 sudo apt update
 sudo apt install -y software-properties-common
 sudo add-apt-repository -y ppa:deadsnakes/ppa
-sudo apt update
 sudo apt install -y python3.10 python3.10-venv python3.10-dev
 sudo apt-get install cmake build-essential libglew-dev libpython3.10-dev
 
 # Generar un ambiente virtual donde iran las dependencias
-python3.10 -m venv env310
-source env310/bin/activate
+python3.10 -m venv venv310
+source venv310/bin/activate
 
 # Instalacion de dependencias
 pip install --upgrade pip
@@ -23,7 +19,7 @@ pip install numpy
 pip install ttkbootstrap
 pip install psutil
 pip install matplotlib
-pip install scikit-imageskimage
+pip install scikit-image
 pip install opencv-python opencv-contrib-python
 pip install PyOpenGL PyOpenGL_accelerate
 pip install g2o-python
@@ -36,7 +32,7 @@ sudo apt install build-essential cmake git pkg-config libgl1-mesa-dev libglew-de
 git clone --recursive https://github.com/stevenlovegrove/Pangolin.git
 cd Pangolin
 mkdir build && cd build
-cmake .. -DPython3_EXECUTABLE=$(which python3) -DCMAKE_BUILD_TYPE=Release
+cmake .. -DPython3_EXECUTABLE=$(which python3.10) -DCMAKE_BUILD_TYPE=Release
 cmake --build .            # Compilar Pangolin (todos sus componentes)
 cmake --build . --target pypangolin_pip_install
 
