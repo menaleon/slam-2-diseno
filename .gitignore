@@ -1,5 +1,5 @@
 # Ignorar el ambiente virtual
-venv3.10/
+./venv3.10/
 
 # Ignorar archivos de caché de Python
 __pycache__/
