@@ -35,7 +35,7 @@ def draw_trajectory(trajectory, window_title):
 
         gl.glLineWidth(2)
         gl.glColor3f(0.0, 1.0, 0.0) 
-        pypangolin.DrawLine(positions)
+        pypangolin.glDrawLines(positions)
 
         # for start point
         gl.glPointSize(10)
