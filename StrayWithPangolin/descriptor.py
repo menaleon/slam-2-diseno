@@ -29,8 +29,10 @@ class PangolinViewer:
 
         self.handler = pypangolin.Handler3D(self.scam)
         self.dcam = pypangolin.CreateDisplay().SetBounds(
-            pypangolin.Attach(0), pypangolin.Attach(1),
-            pypangolin.Attach(0), pypangolin.Attach(1), -w/h
+            pypangolin.Attach.Pix(0), 
+            pypangolin.Attach.Pix(768),
+            pypangolin.Attach.Pix(0), 
+            pypangolin.Attach.Pix(1024),
         ).SetHandler(self.handler)
 
     def viewer_refresh(self, q):
@@ -43,10 +45,14 @@ class PangolinViewer:
         self.dcam.Activate(self.scam)
 
         # Dibujar la trayectoria de la cámara
+        #if 'trajectory' in self.state:
+         #   trajectory = self.state['trajectory']
+          #  gl.glColor3f(1.0, 0.0, 0.0)
+           # pypangolin.DrawLine(trajectory)
+
         if 'trajectory' in self.state:
-            trajectory = self.state['trajectory']
-            gl.glColor3f(1.0, 0.0, 0.0)
-            pypangolin.DrawLine(trajectory)
+            trajectory = np.array(self.state['trajectory'], dtype=np.float32)
+            pypangolin.glDrawLines(trajectory)
 
         # Dibujar la nube de puntos
         if 'points' in self.state and self.state['points'] is not None:

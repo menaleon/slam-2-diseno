@@ -2,6 +2,10 @@ import numpy as np
 import pypangolin
 import OpenGL.GL as gl
 
+import pypangolin
+import OpenGL.GL as gl
+import numpy as np
+
 def draw_multiple_trajectories(trajectories, colors, titles, window_title="Trajectories Viewer"):
     """Dibuja múltiples trayectorias en una sola ventana de pypangolin."""
     pypangolin.CreateWindowAndBind(window_title, 1024, 768)
@@ -17,7 +21,12 @@ def draw_multiple_trajectories(trajectories, colors, titles, window_title="Traje
 
     handler = pypangolin.Handler3D(scam)
     dcam = pypangolin.CreateDisplay()
-    dcam.SetBounds(0.0, 1.0, 0.0, 1.0)
+    dcam.SetBounds(
+        pypangolin.Attach.Pix(0),
+        pypangolin.Attach.Pix(768),  # Altura de la ventana
+        pypangolin.Attach.Pix(0),
+        pypangolin.Attach.Pix(1024)  # Ancho de la ventana
+    )
     dcam.SetHandler(handler)
 
     while not pypangolin.ShouldQuit():
@@ -25,25 +34,25 @@ def draw_multiple_trajectories(trajectories, colors, titles, window_title="Traje
         dcam.Activate(scam)
 
         for trajectory, color, title in zip(trajectories, colors, titles):
-            positions = trajectory[:, :3, 3]  # Extraer posiciones (x, y, z) de la trayectoria
+            positions = trajectory[:, :3, 3].astype(np.float32)  # Convertir a float32 para glDrawLines
             
-            # Dibujar la línea de la trayectoria
+            # Dibujar la línea de la trayectoria con `glDrawLines`
             gl.glLineWidth(2)
             gl.glColor3f(*color)
-            pypangolin.DrawLine(positions)
+            pypangolin.glDrawLines(positions)
 
             # Punto de inicio
             gl.glPointSize(10)
             gl.glColor3f(1.0, 0.0, 0.0)  # Rojo para el inicio
             gl.glBegin(gl.GL_POINTS)
-            gl.glVertex3f(positions[0][0], positions[0][1], positions[0][2])
+            gl.glVertex3f(*positions[0])
             gl.glEnd()
 
             # Punto de fin
             gl.glPointSize(10)
             gl.glColor3f(0.0, 0.0, 1.0)  # Azul para el fin
             gl.glBegin(gl.GL_POINTS)
-            gl.glVertex3f(positions[-1][0], positions[-1][1], positions[-1][2])
+            gl.glVertex3f(*positions[-1])
             gl.glEnd()
 
         pypangolin.FinishFrame()

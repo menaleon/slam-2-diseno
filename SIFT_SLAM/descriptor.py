@@ -74,7 +74,14 @@ class Descriptor(object):
 
     # Create Interactive View in window
     self.dcam = pypangolin.CreateDisplay()
-    self.dcam.SetBounds(0.0, 1.0, 0.0, 1.0, -w/h)
+    self.dcam.SetBounds(
+      pypangolin.Attach.Pix(0),
+      pypangolin.Attach.Pix(h),
+      pypangolin.Attach.Pix(0),
+      pypangolin.Attach.Pix(1),
+      pypangolin.Attach.Pix(w)
+    )
+
     self.dcam.SetHandler(self.handler)
 
   def viewer_refresh(self, q):

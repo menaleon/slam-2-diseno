@@ -1,0 +1,27 @@
+# Ignorar el ambiente virtual
+venv3.10/
+
+# Ignorar archivos de caché de Python
+__pycache__/
+*.py[cod]
+
+# Ignorar archivos de configuración de entornos virtuales
+.venv/
+env/
+venv/
+
+# Ignorar archivos de logs y bases de datos
+*.log
+*.sqlite3
+
+# Ignorar archivos de configuración de IDEs y editores de texto
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignorar dependencias instaladas desde pip
+*.egg-info/
+*.egg
+dist/
+build/

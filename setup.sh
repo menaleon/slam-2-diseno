@@ -8,8 +8,8 @@ sudo apt install -y python3.10 python3.10-venv python3.10-dev
 sudo apt-get install cmake build-essential libglew-dev libpython3.10-dev
 
 # Generar un ambiente virtual donde iran las dependencias
-python3.10 -m venv venv310
-source venv310/bin/activate
+#python3.10 -m venv venv310
+#source venv310/bin/activate
 
 # Instalacion de dependencias
 pip install --upgrade pip

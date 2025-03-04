@@ -19,7 +19,12 @@ def draw_trajectory(trajectory, window_title):
     handler = pypangolin.Handler3D(scam)
 
     dcam = pypangolin.CreateDisplay()
-    dcam.SetBounds(0.0, 1.0, 0.0, 1.0)
+    dcam.SetBounds(
+        pypangolin.Attach.Pix(0),
+        pypangolin.Attach.Pix(1),
+        pypangolin.Attach.Pix(0),
+        pypangolin.Attach.Pix(1)
+    )    
     dcam.SetHandler(handler)
 
     positions = trajectory[:, :3, 3]
