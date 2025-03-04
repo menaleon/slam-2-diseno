@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Este script instala las dependencias necesarias en un ambiente virtual de Ubuntu24.04
+# Utiliza Python3.10 y pypangolin desde el repositorio de stevenlovegrove
+# Existen otros repositorios para pangolin pero solo este me sirvio
+
 # Instalar Python 3.10 y paquetes necesarios
 sudo apt update
 sudo apt install -y software-properties-common
@@ -8,8 +12,8 @@ sudo apt install -y python3.10 python3.10-venv python3.10-dev
 sudo apt-get install cmake build-essential libglew-dev libpython3.10-dev
 
 # Generar un ambiente virtual donde iran las dependencias
-#python3.10 -m venv venv310
-#source venv310/bin/activate
+python3.10 -m venv venv310
+source venv310/bin/activate
 
 # Instalacion de dependencias
 pip install --upgrade pip
