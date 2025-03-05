@@ -1,9 +1,6 @@
 #!/bin/bash
 
 # Este script instala las dependencias necesarias en un ambiente virtual de Ubuntu24.04
-# Utiliza Python3.10 y pypangolin desde el repositorio de stevenlovegrove
-# Existen otros repositorios para pangolin pero solo este me sirvio
-
 # Instalar Python 3.10 y paquetes necesarios
 sudo apt update
 sudo apt install -y software-properties-common
