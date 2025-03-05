@@ -1,6 +1,7 @@
 # Ignorar el ambiente virtual
 venv310/*
 Pangolin/*
+slam_env/*
 
 # Ignorar archivos de caché de Python
 __pycache__/
