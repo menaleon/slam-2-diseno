@@ -69,5 +69,5 @@ class VisualSLAM:
 
 if __name__ == "__main__":
     slam = VisualSLAM()
-    video_path = "/home/jimena/Descargas/aparta.mp4"  # Reemplázalo con tu video de entrada
+    video_path = "/home/jimena/Escritorio/PROYECTO/monocular/aparta.mp4"  # Reemplázalo con tu video de entrada
     slam.process_video(video_path)

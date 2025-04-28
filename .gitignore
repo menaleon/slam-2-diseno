@@ -2,6 +2,9 @@
 venv310/*
 Pangolin/*
 slam_env/*
+project_env/*
+project_env_310/*
+
 
 # Ignorar archivos de caché de Python
 __pycache__/

@@ -6,10 +6,10 @@ from PIL import Image
 import open3d as o3d
 import time
 
+# Descripción del script
 description = """
-Este script visualiza datasets tomados con la aplicación Stray Scanner.
+Este script visualiza datasets tomados con la aplicación Stray Scanner usando Open3D.
 """
-
 usage = """
 Llamar con: python stray_visualize.py <ruta-al-directorio-del-dataset>
 """
@@ -32,9 +32,10 @@ def read_data(flags):
         T_WC[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
         T_WC[:3, 3] = position
         poses.append(T_WC)
+    
     depth_dir = os.path.join(flags.path, 'depth')
     depth_frames = [os.path.join(depth_dir, p) for p in sorted(os.listdir(depth_dir)) if p.endswith('.npy') or p.endswith('.png')]
-    return { 'poses': poses, 'intrinsics': intrinsics, 'depth_frames': depth_frames }
+    return {'poses': poses, 'intrinsics': intrinsics, 'depth_frames': depth_frames}
 
 def load_depth_image(path):
     if path.endswith('.npy'):
@@ -56,55 +57,74 @@ def compute_point_cloud_for_frame(i, data):
     height, width = depth.shape
     
     u, v = np.meshgrid(np.arange(width), np.arange(height))
+    u, v, depth = u.flatten(), v.flatten(), depth.flatten()
+    valid = depth > 0
     
-    x = (u - cx) * depth / fx
-    y = (v - cy) * depth / fy
-    z = depth
-    
-    points_camera = np.stack((x, y, z), axis=-1).reshape(-1, 3)
-    valid = points_camera[:, 2] > 0
-    points_camera = points_camera[valid]
+    x = (u[valid] - cx) * depth[valid] / fx
+    y = (v[valid] - cy) * depth[valid] / fy
+    z = depth[valid]
+    points_camera = np.vstack((x, y, z)).T
     
     R_WC, t_WC = T_WC[:3, :3], T_WC[:3, 3]
     points_world = (R_WC @ points_camera.T).T + t_WC
     return points_world
 
-def visualize_trajectory_and_cloud(trajectory_points, point_cloud):
-    trajectory = o3d.geometry.LineSet()
-    trajectory.points = o3d.utility.Vector3dVector(trajectory_points)
-    lines = [[i, i + 1] for i in range(len(trajectory_points) - 1)]
-    trajectory.lines = o3d.utility.Vector2iVector(lines)
-    trajectory.colors = o3d.utility.Vector3dVector([[1, 0, 0] for _ in range(len(lines))])
-    
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(point_cloud)
-    pcd.paint_uniform_color([0, 1, 0])
-    
-    o3d.visualization.draw_geometries([pcd, trajectory])
+def validate(flags):
+    absolute_path = os.path.abspath(flags.path)
+    if not os.path.exists(os.path.join(flags.path, 'odometry.csv')):
+        print(f"El directorio {absolute_path} no contiene 'odometry.csv'.")
+        return False
+    if not os.path.exists(os.path.join(flags.path, 'depth')):
+        print(f"El directorio {absolute_path} no contiene la carpeta 'depth'.")
+        return False
+    return True
 
 def main():
     flags = read_args()
-    if not os.path.exists(flags.path):
-        print(f"El directorio {flags.path} no existe.")
+    if not validate(flags):
         return
 
     data = read_data(flags)
     trajectory_points = []
     point_cloud_points = []
+    trajectory = [] 
+    vis = o3d.visualization.Visualizer()
+    vis.create_window()
+    
+    point_cloud = o3d.geometry.PointCloud()
+    traj_line_set = o3d.geometry.LineSet()
     
     for i in range(0, len(data['poses']), flags.every):
         T_WC = data['poses'][i]
-        trajectory_points.append(T_WC[:3, 3])
+        position = T_WC[:3, 3]
+        trajectory_points.append(position)
+        trajectory.append(T_WC.copy())
         
         points_world = compute_point_cloud_for_frame(i, data)
-        if len(points_world) > 0:
+        if points_world is not None and len(points_world) > 0:
             point_cloud_points.append(points_world)
         
-        time.sleep(0.05)  # Simular actualización en tiempo real
+        all_points = np.vstack(point_cloud_points) if point_cloud_points else None
+        if all_points is not None and len(all_points) > 100000:
+            idx = np.random.choice(len(all_points), 100000, replace=False)
+            all_points_sampled = all_points[idx]
+        else:
+            all_points_sampled = all_points
+        
+        if all_points_sampled is not None:
+            point_cloud.points = o3d.utility.Vector3dVector(all_points_sampled)
+            point_cloud.colors = o3d.utility.Vector3dVector(np.tile([0, 1, 0], (len(all_points_sampled), 1)))
+            vis.add_geometry(point_cloud)
+            vis.poll_events()
+            vis.update_renderer()
+        
+        time.sleep(0.05)
     
-    if point_cloud_points:
-        all_points = np.vstack(point_cloud_points)
-        visualize_trajectory_and_cloud(np.array(trajectory_points), all_points)
-
+    trajectory_array = np.array(trajectory)
+    np.save('slam_lidar.npy', trajectory_array)
+    print("Trayectoria guardada en 'slam_lidar.npy'")
+    vis.run()
+    vis.destroy_window()
+    
 if __name__ == "__main__":
     main()
