@@ -145,7 +145,7 @@ class LoopClosureSLAM:
 
 # ---------- Ejecución ----------
 if __name__ == "__main__":
-    video_path = "/home/jimena/Escritorio/PROYECTO/monocular/aparta.mp4"
+    video_path = "/home/jimena/Escritorio/PROYECTO/monocular/apartaJus.mp4"
     slam = LoopClosureSLAM()
     slam.process_video(video_path)
     print("SLAM con cierre de lazo completado.")

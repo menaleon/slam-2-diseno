@@ -117,7 +117,7 @@ class PoseGraphSLAM:
 
 # ---------- Ejecución ----------
 if __name__ == "__main__":
-    video_path = "/home/jimena/Escritorio/PROYECTO/monocular/car.mp4"
+    video_path = "/home/jimena/Escritorio/PROYECTO/monocular/aparta.mp4"
     slam = PoseGraphSLAM()
     slam.process_video(video_path)
     print("Optimización global completada y trayectoria guardada.")

@@ -1,10 +1,5 @@
 # Ignorar el ambiente virtual
-venv310/*
-Pangolin/*
-slam_env/*
 project_env/*
-project_env_310/*
-
 
 # Ignorar archivos de caché de Python
 __pycache__/
@@ -14,10 +9,6 @@ __pycache__/
 .venv/
 env/
 venv/
-
-# Ignorar archivos de logs y bases de datos
-*.log
-*.sqlite3
 
 # Ignorar archivos de configuración de IDEs y editores de texto
 .vscode/

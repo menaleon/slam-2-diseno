@@ -3,14 +3,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # === CONFIGURACIÓN ===
-video_path = '/home/jimena/Escritorio/PROYECTO/monocular/apartaJus.mp4'
+video_path = '/home/jimena/Escritorio/PROYECTO/monocular/aparta.mp4'
 trajectory = []
 orientations = []
 
 # === MATRIZ INTRÍNSECA ESTIMADA ===
+"""
 K = np.array([[630.0, 0, 360.0],
               [0, 630.0, 640.0],
               [0, 0, 1]], dtype=np.float32)
+              """
+
+K = np.array([
+    [914.3,   0.0, 640.0],
+    [  0.0, 929.0, 360.0],
+    [  0.0,   0.0,   1.0]
+], dtype=np.float32)
 
 # === INICIALIZACIÓN ===
 cap = cv2.VideoCapture(video_path)
@@ -74,7 +82,7 @@ x = trajectory[:, 0]
 z = trajectory[:, 2]
 u = orientations[:, 0]
 w = orientations[:, 2]
-
+                                                
 # Visualización con inicio y fin marcados
 plt.figure(figsize=(8, 6))
 plt.quiver(x, z, u, w, angles='xy', scale_units='xy', scale=1, color='blue', width=0.003)
