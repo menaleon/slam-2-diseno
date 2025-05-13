@@ -1,9 +1,10 @@
 import os
+import subprocess
 import tkinter as tk
 from tkinter import messagebox
 
 # Carpeta raiz
-CARPETA_LMS = "./LMS"
+CARPETA_LMS = "LMS"
 
 #Obtiene los nombres de subcarpetas en la carpeta LMS que empiecen con LMS_
 def obtener_tipos_lms():
@@ -15,6 +16,15 @@ def obtener_tipos_lms():
 
 def ejecutar_lms(nombre_lms):
     messagebox.showinfo("LMS seleccionado", f"Ejecutando: {nombre_lms}")
+    
+    try:
+        # Esta línea espera a que el script termine antes de continuar
+        subprocess.run(["python3", f"{CARPETA_LMS}/{nombre_lms}/main2.py"], check=True)
+        messagebox.showinfo("Éxito", f"{CARPETA_LMS}/{nombre_lms}/{nombre_lms}.py finalizó correctamente.")
+    except subprocess.CalledProcessError as e:
+        messagebox.showerror("Error", f"Error en la ejecución de {CARPETA_LMS}/{nombre_lms}/{nombre_lms}.py:\n{e}")
+    except FileNotFoundError:
+        messagebox.showerror("Error", f"Archivo {CARPETA_LMS}/{nombre_lms}/{nombre_lms}.py no encontrado")
     
 
 def calcular_metricas():
@@ -41,7 +51,7 @@ tipos_lms = obtener_tipos_lms()
 for i, lms in enumerate(tipos_lms):
     nombre_mostrado = lms.replace("LMS_", "LMS tipo ")
     boton = tk.Button(frame_botones, text=nombre_mostrado, font=("Arial", 12, "bold"),
-                      bg="#66ff66", relief="raised", width=15,
+                      bg="#66ff66", relief="raised", width=19,
                       command=lambda lms=lms: ejecutar_lms(lms))
     boton.grid(row=0, column=i, padx=10)
 

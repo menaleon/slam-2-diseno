@@ -5,7 +5,7 @@ import yaml
 import matplotlib.pyplot as plt
 
 # === CONFIGURACIÓN DEL TABLERO DE AJEDREZ ===
-pattern_size = (6, 9)  # 7 columnas × 10 filas de cuadros → 6 × 9 esquinas internas
+pattern_size = (6, 9)  # 7 columnas × 10 filas de cuadros o sea 6 × 9 esquinas internas
 square_size = 0.025  # tamaño estimado del cuadro en metros
 
 # === PREPARAR PUNTOS OBJETO 3D ===
@@ -44,11 +44,11 @@ for fname in images:
 
         img_vis = cv2.drawChessboardCorners(img.copy(), pattern_size, corners, ret)
         plt.imshow(cv2.cvtColor(img_vis, cv2.COLOR_BGR2RGB))
-        plt.title(f"✅ Patrón detectado: {fname}")
+        plt.title(f"Patrón detectado: {fname}")
         plt.axis("off")
         plt.show()
     else:
-        print(f"❌ Patrón NO detectado en: {fname}")
+        print(f"Patrón NO detectado en: {fname}")
 
 print(f"\nTotal de imágenes válidas: {valid_images}")
 
@@ -58,9 +58,9 @@ if valid_images == 0:
 
 ret, K, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 
-print("\n✅ MATRIZ INTRÍNSECA (K):")
+print("\nMATRIZ INTRÍNSECA (K):")
 print(K)
-print("\n✅ COEFICIENTES DE DISTORSIÓN:")
+print("\nCOEFICIENTES DE DISTORSIÓN:")
 print(dist.ravel())
 
 # === GUARDAR RESULTADO ===
@@ -72,4 +72,4 @@ calib_data = {
 with open("camera_calibration.yaml", "w") as f:
     yaml.dump(calib_data, f)
 
-print("\n💾 Parámetros guardados en camera_calibration.yaml")
+print("\nParámetros guardados en camera_calibration.yaml")
