@@ -68,6 +68,7 @@ pendiente
 
 Los resultados se almacenan automáticamente en una jerarquía de carpetas similar a la siguiente:
 
+```
 resultados/
     └── LMS_ORB_with_BA/
         └── 1245_2505_2025/
@@ -77,3 +78,4 @@ resultados/
         └── 1304_2505_2025/
             ├── trayectoria_LMS_visual.csv
             └── trayectoria_LMS_visual.png
+```
