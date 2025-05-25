@@ -1,11 +1,13 @@
 import csv
+from datetime import datetime
 import sys
 import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from collections import deque
-from scipy.signal import savgol_filter
+from pathlib import Path
+#from collections import deque
+#from scipy.signal import savgol_filter
 from scipy.optimize import least_squares
 
 class PoseGraphSLAM:
@@ -149,13 +151,18 @@ class PoseGraphSLAM:
         optimized_positions = result.x.reshape((-1, 3))
         return optimized_positions[:, [0, 2]]  # Devuelve solo X-Z
 
-    def save_trajectory_outputs(self, trajectory):
+    def save_trajectory_outputs(self, trajectory, input_video_path):
         """
         Guarda la trayectoria optimizada en formato CSV y genera una visualizacion en PNG.
 
         :param trajectory: Matriz Nx2 con las coordenadas X-Z de la trayectoria.
         """
-        output_base = f"trayectoria_{self.output_name}"
+        # === Preparar ruta de salida con timestamp ===
+        tipo_lms = self.output_name  # por ejemplo: "LMS_ORB_with_BA"
+        timestamp = datetime.now().strftime("%H%M_%d%m_%Y") 
+        output_dir = os.path.join("resultados", tipo_lms, timestamp)
+        os.makedirs(output_dir, exist_ok=True)
+        output_base = os.path.join(output_dir, f"trayectoria_{self.output_name}") # Nombre base de salida
 
         # Guarda los datos de la trayectoria en archivo CSV
         with open(output_base + ".csv", "w", newline='') as file:
@@ -169,7 +176,7 @@ class PoseGraphSLAM:
         plt.scatter(trajectory[-1, 0], trajectory[-1, 1], color='r', label='End')
         plt.xlabel("X Position")
         plt.ylabel("Z Position")
-        plt.title(f"Trajectory 2D - {self.output_name}")
+        plt.title(f"{self.output_name} para {Path(input_video_path).name}")
         plt.legend()
         plt.axis("equal")
         plt.grid(True)
@@ -197,7 +204,7 @@ class PoseGraphSLAM:
 
         # Ejecuta la optimizacion y guarda resultados
         optimized_trajectory = self.optimize_pose_graph()
-        self.save_trajectory_outputs(optimized_trajectory)
+        self.save_trajectory_outputs(optimized_trajectory, input_video_path)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
