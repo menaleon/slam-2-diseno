@@ -71,11 +71,11 @@ Los resultados se almacenan automáticamente en una jerarquía de carpetas simil
 ```
 resultados/
     └── LMS_ORB_with_BA/
-        └── 1245_2505_2025/
+        └── 1245_2505_2025/             (hora-minuto_dia-mes_año)
             ├── trayectoria_LMS_ORB_with_BA.csv
             └── trayectoria_LMS_ORB_with_BA.png
     └── LMS_visual
-        └── 1304_2505_2025/
+        └── 1304_2505_2025/             (hora-minuto_dia-mes_año)
             ├── trayectoria_LMS_visual.csv
             └── trayectoria_LMS_visual.png
 ```
