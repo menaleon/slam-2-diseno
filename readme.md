@@ -2,7 +2,9 @@
 
 Este proyecto implementa una plataforma modular que permite experimentar con distintos algoritmos de SLAM (Simultaneous Localization and Mapping) utilizando videos monoculares como entrada. Está diseñado para ser interactivo, visualmente atractivo y extensible. También incluye funcionalidad para medir métricas de rendimiento como uso de CPU, memoria y tiempo de ejecución. 
 
-Proyecto desarrollado por Jimena León Huertas, estudiante del Tecnológico de Costa Rica (TEC) como parte del curso CE-1114 - Proyecto de Aplicación de la Ingeniería en Computadores. Se agradece el apoyo del profesor asesor MSc. Luis Alberto Chavarría Zamora.
+Proyecto desarrollado por Jimena León Huertas, estudiante del Tecnológico de Costa Rica (TEC) durante el primer semestre de 2025, como parte del curso CE-1114 - Proyecto de Aplicación de la Ingeniería en Computadores. 
+
+Se agradece el apoyo del profesor asesor MSc. Luis Alberto Chavarría Zamora.
 
 ## Propósito del proyecto
 
@@ -66,10 +68,8 @@ pendiente
 
 Los resultados se almacenan automáticamente en la siguiente jerarquía de carpetas:
 
-
 resultados/
-└── LMS_ORB_with_PG/
-    └── 1245_2505_2025/                       (HORA-MINUTO_DIA-MES_AÑO)
-        ├── trayectoria_LMS_ORB_with_PG.csv
-        └── trayectoria_LMS_ORB_with_PG.png
-
+└── LMS_ORB_with_BA/
+└── 1245_2505_2025/
+├── trayectoria_LMS_ORB_with_BA.csv
+└── trayectoria_LMS_ORB_with_BA.png
