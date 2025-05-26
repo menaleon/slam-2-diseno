@@ -137,7 +137,7 @@ class SIFTVisualSLAM:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python3 main_sift.py <ruta_al_video>")
+        print("Uso: python3 main.py <ruta_al_video>")
         sys.exit(1)
 
     input_video_path = sys.argv[1]
