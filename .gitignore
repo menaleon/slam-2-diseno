@@ -1,6 +1,7 @@
 # Ignorar el ambiente virtual
 project_env/*
 slam_env/*
+resultados/*
 
 # Ignorar archivos de caché de Python
 __pycache__/
