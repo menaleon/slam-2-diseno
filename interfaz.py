@@ -26,10 +26,10 @@ def ejecutar_lms(nombre_lms):
         return
 
     messagebox.showinfo("LMS seleccionado", f"Ejecutando: {nombre_lms}\nCon video:\n{ruta_video}")
-    script_path = os.path.join(CARPETA_LMS, nombre_lms, "posegraph.py")
+    script_path = os.path.join(CARPETA_LMS, nombre_lms, "main.py")
     comando = ["python3", script_path, ruta_video]
 
-    resultados = medir_metricas(comando)
+    resultados = medir_metricas(comando, nombre_lms)
 
     salida_filtrada = {}
     for clave, valor in resultados.items():

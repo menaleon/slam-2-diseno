@@ -6,18 +6,26 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-#from collections import deque
-#from scipy.signal import savgol_filter
 from scipy.optimize import least_squares
 
 class PoseGraphSLAM:
-    def __init__(self, name="pose_graph_slam"):
+    def __init__(self, fx=700, fy=700, cx=320, cy=240):
         """
         Inicializa los componentes del sistema SLAM basado en grafo de poses.
         Configura el detector de caracteristicas, la matriz de la camara y las variables internas.
 
         :param name: Nombre base para los archivos de salida.
         """
+
+        # Parametros de la camara para la matriz intrinseca
+        self.fx = fx
+        self.fy = fy
+        self.cx = cx
+        self.cy = cy
+
+        # Nombre del tipo de SLAM     
+        self.name = Path(__file__).resolve().parent.name
+
         # Detector ORB con hasta 2000 keypoints por frame
         self.orb_detector = cv2.ORB_create(2000)
 
@@ -25,11 +33,11 @@ class PoseGraphSLAM:
         self.matcher = cv2.BFMatcher(cv2.NORM_HAMMING)
 
         # Matriz intrinseca de la camara (fx, fy, cx, cy)
-        self.camera_matrix = np.array([[700, 0, 320],
-                                       [0, 700, 240],
-                                       [0,   0,   1]])
-
-        self.output_name = name
+        self.camera_matrix = np.array([
+                                    [self.fx,    0, self.cx],
+                                    [0,    self.fy, self.cy],
+                                    [0,        0,      1]
+                                ])
 
         # Lista de poses absolutas de cada keyframe (matrices 4x4)
         self.keyframe_poses = []
@@ -158,11 +166,11 @@ class PoseGraphSLAM:
         :param trajectory: Matriz Nx2 con las coordenadas X-Z de la trayectoria.
         """
         # === Preparar ruta de salida con timestamp ===
-        tipo_lms = self.output_name  # por ejemplo: "LMS_ORB_with_BA"
+        tipo_lms = self.name  # por ejemplo: "LMS_ORB_with_BA"
         timestamp = datetime.now().strftime("%H%M_%d%m_%Y") 
         output_dir = os.path.join("resultados", tipo_lms, timestamp)
         os.makedirs(output_dir, exist_ok=True)
-        output_base = os.path.join(output_dir, f"trayectoria_{self.output_name}") # Nombre base de salida
+        output_base = os.path.join(output_dir, f"trayectoria_{self.name}") # Nombre base de salida
 
         # Guarda los datos de la trayectoria en archivo CSV
         with open(output_base + ".csv", "w", newline='') as file:
@@ -176,7 +184,7 @@ class PoseGraphSLAM:
         plt.scatter(trajectory[-1, 0], trajectory[-1, 1], color='r', label='End')
         plt.xlabel("X Position")
         plt.ylabel("Z Position")
-        plt.title(f"{self.output_name} para {Path(input_video_path).name}")
+        plt.title(f"{self.name} para {Path(input_video_path).name}")
         plt.legend()
         plt.axis("equal")
         plt.grid(True)
@@ -208,7 +216,7 @@ class PoseGraphSLAM:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python3 posegraph.py <ruta_al_video>")
+        print("Uso: python3 main.py <ruta_al_video>")
         sys.exit(1)
 
     input_video_path = sys.argv[1]
