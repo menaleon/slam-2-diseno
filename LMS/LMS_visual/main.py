@@ -34,6 +34,12 @@ class OpticalFlowSLAM:
         self.min_frame_gap = 5
         self.min_keyframe_translation = 0.05
 
+        # Variables para métricas
+        self.total_successful_frames = 0
+        self.total_points_triangulated = 0
+        self.total_translation_magnitude = 0.0
+        self.total_pose_estimations = 0
+
     def process_frame(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -73,6 +79,12 @@ class OpticalFlowSLAM:
                 else:
                     self.frame_counter += 1
 
+                # Actualizar métricas
+                self.total_successful_frames += 1
+                self.total_points_triangulated += len(good_prev)
+                self.total_translation_magnitude += translation_magnitude
+                self.total_pose_estimations += 1
+
     def optimize_pose_graph(self):
         keyframe_positions = np.array([pose[:3, 3] for pose in self.keyframe_poses])
         initial_parameters = keyframe_positions.flatten()
@@ -102,15 +114,34 @@ class OpticalFlowSLAM:
             writer.writerow(["X", "Z"])
             writer.writerows(trajectory)
 
+        # Cálculo de métricas finales
+        num_keyframes = len(self.keyframe_poses)
+        avg_translation = self.total_translation_magnitude / max(1, self.total_pose_estimations)
+        avg_tracked_points = self.total_points_triangulated / max(1, self.total_pose_estimations)
+        triangulation_success_rate = self.total_successful_frames / max(1, self.total_pose_estimations)
+
+        # Graficar trayectoria
+        plt.figure(figsize=(10, 6))
         plt.plot(trajectory[:, 0], trajectory[:, 1], 'b-', label='Optimized Trajectory')
         plt.scatter(trajectory[0, 0], trajectory[0, 1], color='g', label='Start')
         plt.scatter(trajectory[-1, 0], trajectory[-1, 1], color='r', label='End')
+
+        # Añadir leyenda con métricas
+        info_text = (
+            f"Keyframes: {num_keyframes}\n"
+            f"Prom. puntos rastreados: {avg_tracked_points:.1f}\n"
+            f"Éxito triangulación: {triangulation_success_rate:.2%}\n"
+            f"Mov. medio entre keyframes: {avg_translation:.2f} m"
+        )
+        plt.gcf().text(0.02, 0.72, info_text, fontsize=10, bbox=dict(facecolor='white', alpha=0.8))
+
         plt.xlabel("X Position")
         plt.ylabel("Z Position")
         plt.title(f"{self.name} para {Path(input_video_path).name}")
         plt.legend()
         plt.axis("equal")
         plt.grid(True)
+        plt.tight_layout()
         plt.savefig(output_base + ".png")
         plt.close()
 
