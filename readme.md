@@ -1,4 +1,4 @@
-# Multi-LMS Platform with Visual SLAM
+# Multi-SLAM Platform with Visual SLAM
 
 This project implements a modular platform that allows experimenting with different SLAM (Simultaneous Localization and Mapping) algorithms using monocular videos as input. It is designed to be interactive, visually appealing, and extensible. It also includes functionality to measure performance metrics such as CPU usage, memory, and execution time.  
 
@@ -13,16 +13,16 @@ The project was created for educational and research purposes, as part of an aca
 - Test different variants of visual SLAM algorithms.  
 - Visualize estimated 2D trajectories from videos.  
 - Evaluate the resource usage of each implementation.  
-- Facilitate integration and comparison of new LMS techniques.  
+- Facilitate integration and comparison of new SLAM techniques.  
 
 ## Main Features
 
 - Graphical interface developed in `Tkinter` with a modern and responsive design.  
-- Support for multiple LMS implementations stored in subfolders such as `LMS_ORB_with_BA`, `LMS_visual`, etc.  
-- Execution of individual LMS scripts with dynamic `.mp4` video selection.  
+- Support for multiple SLAM implementations stored in subfolders such as `SLAM_ORB_with_PG`, `SLAM_visual`, etc.  
+- Execution of individual SLAM scripts with dynamic `.mp4` video selection.  
 - Automatic performance metrics calculation (`psutil`).  
 - Automatic result visualization and export in CSV and PNG.  
-- Results organized by date and LMS type.  
+- Results organized by date and SLAM type.  
 
 ## System Requirements
 
@@ -71,12 +71,12 @@ The results are automatically stored in a folder hierarchy like the following:
 
 ```
 results/
-    └── LMS_ORB_with_BA/
+    └── SLAM_ORB_with_PG/
         └── 1245_2505_2025/             (hour-minute_day-month_year)
-            ├── trajectory_LMS_ORB_with_BA.csv
-            └── trajectory_LMS_ORB_with_BA.png
-    └── LMS_visual
+            ├── trajectory_SLAM_ORB_with_PG.csv
+            └── trajectory_SLAM_ORB_with_PG.png
+    └── SLAM_visual
         └── 1304_2505_2025/             
-            ├── trajectory_LMS_visual.csv
-            └── trajectory_LMS_visual.png
+            ├── trajectory_SLAM_visual.csv
+            └── trajectory_SLAM_visual.png
 ```
