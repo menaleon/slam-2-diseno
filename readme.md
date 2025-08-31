@@ -1,8 +1,8 @@
-# Multi-SLAM Platform with Visual SLAM
+# Multi-LMS Platform with Visual SLAM
 
 This project implements a modular platform that allows experimenting with different SLAM (Simultaneous Localization and Mapping) algorithms using monocular videos as input. It is designed to be interactive, visually appealing, and extensible. It also includes functionality to measure performance metrics such as CPU usage, memory, and execution time.  
 
-Project developed by Jimena León Huertas, student at Tecnológico de Costa Rica (TEC) during the first semester of 2025, as part of the course CE-1114 - Computer Engineering Application Project.  
+Project developed by Jimena León Huertas, student at the Tecnológico de Costa Rica (TEC) during the first semester of 2025, as part of the course CE-1114 – Computer Engineering Application Project.  
 
 Special thanks to the advisor MSc. Luis Alberto Chavarría Zamora.  
 
@@ -13,16 +13,16 @@ The project was created for educational and research purposes, as part of an aca
 - Test different variants of visual SLAM algorithms.  
 - Visualize estimated 2D trajectories from videos.  
 - Evaluate the resource usage of each implementation.  
-- Facilitate integration and comparison of new SLAM techniques.  
+- Facilitate integration and comparison of new LMS techniques.  
 
 ## Main Features
 
 - Graphical interface developed in `Tkinter` with a modern and responsive design.  
-- Support for multiple SLAM implementations stored in subfolders such as `SLAM_ORB_with_BA`, `SLAM_visual`, etc.  
-- Execution of individual SLAM scripts with dynamic `.mp4` video selection.  
+- Support for multiple LMS implementations stored in subfolders such as `LMS_ORB_with_BA`, `LMS_visual`, etc.  
+- Execution of individual LMS scripts with dynamic `.mp4` video selection.  
 - Automatic performance metrics calculation (`psutil`).  
 - Automatic result visualization and export in CSV and PNG.  
-- Results organized by date and SLAM type.  
+- Results organized by date and LMS type.  
 
 ## System Requirements
 
@@ -38,3 +38,45 @@ The project was created for educational and research purposes, as part of an aca
 ```bash
 git clone https://github.com/menaleon/slam-2-diseno.git
 cd slam-2-diseno
+```
+
+2. Generate the virtual environment and install dependencies with the provided script:
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+## Execution
+
+1. Activate the Python virtual environment (includes all required packages):
+
+```bash
+source venv/bin/activate
+```
+
+2. Run the UI script:
+
+```bash
+python3 ui.py
+```
+
+## User Manual
+
+Pending  
+
+### Results  
+
+The results are automatically stored in a folder hierarchy like the following:
+
+```
+results/
+    └── LMS_ORB_with_BA/
+        └── 1245_2505_2025/             (hour-minute_day-month_year)
+            ├── trajectory_LMS_ORB_with_BA.csv
+            └── trajectory_LMS_ORB_with_BA.png
+    └── LMS_visual
+        └── 1304_2505_2025/             
+            ├── trajectory_LMS_visual.csv
+            └── trajectory_LMS_visual.png
+```
