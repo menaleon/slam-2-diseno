@@ -1,0 +1,9 @@
+{
+    "total_time_sec": 103.947,
+    "cpu_user_sec": 379.07,
+    "cpu_kernel_sec": 24.95,
+    "max_memory_kb": 662996.0,
+    "return_code": 0,
+    "output": "Optimizacion global completada y trayectoria guardada.\n",
+    "errors": ""
+}

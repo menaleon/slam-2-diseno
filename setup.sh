@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Terminar inmediatamente si ocurre un error
+# Exit immediately if an error occurs
 set -e
 
-echo "Instalando dependencias del sistema..."
+echo "Installing system dependencies..."
 
-# Instalar dependencias necesarias del sistema
+# Install required system dependencies
 sudo apt update
 sudo apt install -y \
     python3.12 \
@@ -16,20 +16,20 @@ sudo apt install -y \
     libgl1 \
     libglib2.0-0
 
-echo "Dependencias del sistema instaladas."
+echo "System dependencies installed."
 
-# Crear entorno virtual con Python 3.12
-echo "Creando entorno virtual..."
+# Create virtual environment with Python 3.12
+echo "Creating virtual environment..."
 python3.12 -m venv venv
 
-# Activar entorno virtual
+# Activate virtual environment
 source venv/bin/activate
 
-# Actualizar pip
+# Upgrade pip
 pip install --upgrade pip
 
-# Instalar dependencias de Python
-echo "Instalando dependencias de Python..."
+# Install Python dependencies
+echo "Installing Python dependencies..."
 pip install \
     opencv-python \
     opencv-contrib-python \
@@ -39,4 +39,4 @@ pip install \
     psutil \
     pillow
 
-echo "Entorno configurado correctamente."
+echo "Environment successfully configured."

@@ -1,0 +1,9 @@
+{
+    "total_time_sec": 73.548,
+    "cpu_user_sec": 221.31,
+    "cpu_kernel_sec": 22.36,
+    "max_memory_kb": 463472.0,
+    "return_code": 0,
+    "output": "Global optimization completed and saved trajectory.\n",
+    "errors": ""
+}

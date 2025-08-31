@@ -1,81 +1,40 @@
-# Plataforma LMS múltiple con SLAM visual
+# Multi-SLAM Platform with Visual SLAM
 
-Este proyecto implementa una plataforma modular que permite experimentar con distintos algoritmos de SLAM (Simultaneous Localization and Mapping) utilizando videos monoculares como entrada. Está diseñado para ser interactivo, visualmente atractivo y extensible. También incluye funcionalidad para medir métricas de rendimiento como uso de CPU, memoria y tiempo de ejecución. 
+This project implements a modular platform that allows experimenting with different SLAM (Simultaneous Localization and Mapping) algorithms using monocular videos as input. It is designed to be interactive, visually appealing, and extensible. It also includes functionality to measure performance metrics such as CPU usage, memory, and execution time.  
 
-Proyecto desarrollado por Jimena León Huertas, estudiante del Tecnológico de Costa Rica (TEC) durante el primer semestre de 2025, como parte del curso CE-1114 - Proyecto de Aplicación de la Ingeniería en Computadores. 
+Project developed by Jimena León Huertas, student at Tecnológico de Costa Rica (TEC) during the first semester of 2025, as part of the course CE-1114 - Computer Engineering Application Project.  
 
-Se agradece el apoyo del profesor asesor MSc. Luis Alberto Chavarría Zamora.
+Special thanks to the advisor MSc. Luis Alberto Chavarría Zamora.  
 
-## Propósito del proyecto
+## Project Purpose
 
-El proyecto fue creado con fines educativos e investigativos, como parte de un trabajo académico del Tecnológico de Costa Rica (TEC). Su objetivo es permitir a los estudiantes y desarrolladores:
+The project was created for educational and research purposes, as part of an academic work at Tecnológico de Costa Rica (TEC). Its main goal is to enable students and developers to:
 
-- Probar diferentes variantes de algoritmos SLAM visuales.
-- Visualizar trayectorias estimadas en 2D a partir de videos.
-- Evaluar el consumo de recursos de cada implementación.
-- Facilitar la integración y comparación de nuevas técnicas LMS.
+- Test different variants of visual SLAM algorithms.  
+- Visualize estimated 2D trajectories from videos.  
+- Evaluate the resource usage of each implementation.  
+- Facilitate integration and comparison of new SLAM techniques.  
 
-## Características principales
+## Main Features
 
-- Interfaz gráfica desarrollada en `Tkinter` con diseño moderno y responsivo.
-- Soporte para múltiples LMS almacenados en subcarpetas como `LMS_ORB_with_BA`, `LMS_visual`, etc.
-- Ejecución de scripts LMS individuales con selección dinámica de video `.mp4`.
-- Cálculo automático de métricas de rendimiento (`psutil`).
-- Visualización automática de resultados y exportación en CSV y PNG.
-- Resultados organizados por fecha y tipo de LMS.
+- Graphical interface developed in `Tkinter` with a modern and responsive design.  
+- Support for multiple SLAM implementations stored in subfolders such as `SLAM_ORB_with_BA`, `SLAM_visual`, etc.  
+- Execution of individual SLAM scripts with dynamic `.mp4` video selection.  
+- Automatic performance metrics calculation (`psutil`).  
+- Automatic result visualization and export in CSV and PNG.  
+- Results organized by date and SLAM type.  
 
-## Requisitos del sistema
+## System Requirements
 
-- Ubuntu 22.04 o superior.
-- Python 3.12 (con soporte para venv y tkinter).
-- Acceso a internet para instalación de dependencias.
-- Video de entrada en formato `.mp4`.
+- Ubuntu 22.04 or newer.  
+- Python 3.12 (with venv and tkinter support).  
+- Internet access for dependency installation.  
+- Input video in `.mp4` format.  
 
-## Instalación
+## Installation
 
-1. Clone este repositorio o descargue los archivos en una carpeta local:
+1. Clone this repository or download the files into a local folder:
 
 ```bash
 git clone https://github.com/menaleon/slam-2-diseno.git
 cd slam-2-diseno
-```
-2. Genere el ambiente virtual e instale las dependencias con este script:
-
-```bash
-chmod +x setup.sh
-./setup.sh
-```
-
-## Ejecución
-
-1. Active el ambiente virtual de Python, el cual contiene lo necesario para la ejecución.
-
-```bash
-source venv/bin/activate
-```
-
-2. Ejecute el archivo de la interfaz.
-
-```bash
-python3 interfaz.py
-```
-
-## Manual de usuario
-
-pendiente
-
-### Resultados 
-
-Los resultados se almacenan automáticamente en una jerarquía de carpetas similar a la siguiente:
-
-```
-resultados/
-    └── LMS_ORB_with_BA/
-        └── 1245_2505_2025/             (hora-minuto_dia-mes_año)
-            ├── trayectoria_LMS_ORB_with_BA.csv
-            └── trayectoria_LMS_ORB_with_BA.png
-    └── LMS_visual
-        └── 1304_2505_2025/             (hora-minuto_dia-mes_año)
-            ├── trayectoria_LMS_visual.csv
-            └── trayectoria_LMS_visual.png
-```
